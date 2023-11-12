@@ -7,5 +7,5 @@ p.
 % Beviset
 [
 [1, and(p,q), premise],
-[2, p, andel2(1)]
+[2, p, andel1(1)]
 ].

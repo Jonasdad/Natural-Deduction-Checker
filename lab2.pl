@@ -6,27 +6,25 @@ verify(InputFileName) :- see(InputFileName), read(Prems), read(Goal), read(Proof
 
 %validproof([Prem|Rest],Goal,[[,X,premise]|Next]):- member(X,Prems), valid_proof(Rest,Goal, Next). %check if premise is in prems
 %valid_proof(Prems, Goal, [[Proof]|[]]):- nth0(1,last(Proof,Goal),Goal). %check if last element in proof is goal
-getLast([Last|[]],A):-A=Last.
+getLast([A],A).
 getLast([_|Tail], A):-getLast(Tail,A).
 
-valid_proof(Prems,Goal,Proof):-getLast(Proof,Last),!,nth0(1,Last,Goal),validproof(Prems,Proof,[]).
-%Base Case
-validproof(_, [], _).
-validproof(Prems, [Head|_],List):-validproof(Prems, Head, List).
-validproof(Prems,[[_,X,premise]|Tail],List):-member(X,Prems),append(List,[_,X,premise],NewList),validproof(Prems,Tail,NewList).
+find(Expr, [Expr]).
+find(Expr, [Head|Tail]):-find(Expr, Tail).
+
+valid_proof(Prems, Goal, Proof):- getLast(Proof, Last), nth0(1,Last,Goal), validproof(Prems, Goal, Proof, Proof).
+validproof(Prems, Goal,Proof, []).
+
+%PREMISE
+validproof(Prems, Goal, Proof,[[_,X,premise]|Next]):-!, find(X,Prems), write('added premise'), validproof(Prems, Goal, Proof,Next).
 
 %ANDEL1
-validproof(_,[_,X,andel1(Num)],[Num, Y, _]):-andel1_valid(Num,X,Y).
-andel1_valid(_, X, Y):-and(X,_)=Y.
-
-%ANDEL2
-validproof(_,[_,X,andel2(Num)],[Num, Y, _]):-andel2_valid(Num,X,Y).
-andel2_valid(_, X, Y):-and(_,X)=Y.
+validproof(Prems, Goal,Proof, [[_,X,andel1(Num)|Next]]):- !,find((Num, (and(X,_)), _), Proof) ,validproof(Prems, Goal, Proof,Next).
 
 %OREL
 
 %IMPEL
-
+%validproof(_,[_,X,impel(Num1,Num2)],[Num1, Y, _],[Num2, Z, _]):-impel_valid(Num1,Num2,X,Y,Z).
 %NEGEL
 
 %NEGNEGEL
