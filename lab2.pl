@@ -1,6 +1,3 @@
-%indata i format ([Premiss],Slutsats,[[radnr,sats,regel]]).
-%goal 1 test([p],p,[[1,p,premiss]]).
-%goal 2, OR elimination verify(and(a,b),b,).
 :-discontiguous(validproof/4).
 verify(InputFileName) :- see(InputFileName), read(Prems), read(Goal), read(Proof), seen, valid_proof(Prems, Goal, Proof).
 
@@ -39,7 +36,6 @@ validproof(Prems,Goal,[[LineNr,X,orint2(Num)]|Next],List):-or(A,B)=X,find([Num, 
                                                         append(List, [[LineNr, X, orint2(Num)]], NewList),!,
                                                         write(NewList),nl,
                                                         validproof(Prems, Goal, Next, NewList).
-%OREL
 %ANDINT
 validproof(Prems,Goal,[[LineNr,X,andint(Num1,Num2)]|Next],List):-and(A,B)=X,find([Num1, A, _], List),
                                                                   find([Num2, B, _], List),
@@ -53,13 +49,18 @@ validproof(Prems, Goal, [[LineNr, X, impel(Num1, Num2)]|Next], List):-find([Num1
                                                                       append(List, [[LineNr, X, impel(Num1, Num2)]], NewList),!,
                                                                       write(NewList),nl,
                                                                       validproof(Prems, Goal, Next, NewList).
-%validproof(_,[_,X,impel(Num1,Num2)],[Num1, Y, _],[Num2, Z, _]):-impel_valid(Num1,Num2,X,Y,Z).
 %NEGEL
-
+%COPY
+validproof(Prems, Goal, [[LineNr, X, copy(Num)]|Next], List):-find([Num, X, _], List),
+                                                              append(List, [[LineNr, X, copy(Num)]], NewList),!,
+                                                              write(NewList),nl,
+                                                              validproof(Prems, Goal, Next, NewList).
 %NEGNEGEL
-
-
-
+validproof(Prems, Goal, [[LineNr, X, negnegel(Num)]|Next], List):-find([Num, neg(neg(X)), _], List),
+                                                                    append(List, [[LineNr, X, negnegel(Num)]], NewList),!,
+                                                                    write(NewList),nl,
+                                                                    validproof(Prems, Goal, Next, NewList).
+%OREL
 
 %IMPINT
 
