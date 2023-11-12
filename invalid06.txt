@@ -1,0 +1,11 @@
+% En lista av premisser (v¨anstra delen av sekventen.)
+[p].
+
+% Målet (högra delen av sekventen).
+or(q,p).
+
+% Beviset
+[
+[1, p, premise],
+[2, or(q,p), orint1(1)]
+].

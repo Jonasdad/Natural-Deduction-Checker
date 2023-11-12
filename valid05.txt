@@ -1,0 +1,12 @@
+% En lista av premisser (v¨anstra delen av sekventen.)
+[p, q].
+
+% Målet (högra delen av sekventen).
+and(p,q).
+
+% Beviset
+[
+[1, p, premise],
+[2, q, premise],
+[3, and(p, q), andint(1,2)]
+].

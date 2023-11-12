@@ -29,7 +29,23 @@ validproof(Prems,Goal,[[LineNr,X,andel2(Num)]|Next],List):-find([Num, and(_,X), 
                                                         append(List, [[LineNr, X, andel2(Num)]], NewList),!,
                                                         write(NewList),nl,
                                                         validproof(Prems, Goal, Next, NewList).
+%ORINT1
+validproof(Prems,Goal,[[LineNr,X,orint1(Num)]|Next],List):-or(A,B)=X,find([Num, A, _], List), 
+                                                        append(List, [[LineNr, X, orint1(Num)]], NewList),!,
+                                                        write(NewList),nl,
+                                                        validproof(Prems, Goal, Next, NewList).
+%ORINT2
+validproof(Prems,Goal,[[LineNr,X,orint2(Num)]|Next],List):-or(A,B)=X,find([Num, B, _], List), 
+                                                        append(List, [[LineNr, X, orint2(Num)]], NewList),!,
+                                                        write(NewList),nl,
+                                                        validproof(Prems, Goal, Next, NewList).
 %OREL
+%ANDINT
+validproof(Prems,Goal,[[LineNr,X,andint(Num1,Num2)]|Next],List):-and(A,B)=X,find([Num1, A, _], List),
+                                                                  find([Num2, B, _], List),
+                                                                  append(List, [[LineNr, X,Y, andint(Num1,Num2)]], NewList),!,
+                                                                  write(NewList),nl,
+                                                                  validproof(Prems, Goal, Next, NewList).
 
 %IMPEL
 validproof(Prems, Goal, [[LineNr, X, impel(Num1, Num2)]|Next], List):-find([Num1, imp(Y, X), _], List),
@@ -42,11 +58,8 @@ validproof(Prems, Goal, [[LineNr, X, impel(Num1, Num2)]|Next], List):-find([Num1
 
 %NEGNEGEL
 
-%ANDINT
 
-%ORINT1
 
-%ORINT2
 
 %IMPINT
 
