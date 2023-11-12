@@ -22,3 +22,27 @@ andel1_valid(_, X, Y):-and(X,_)=Y.
 %ANDEL2
 validproof(_,[_,X,andel2(Num)],[Num, Y, _]):-andel2_valid(Num,X,Y).
 andel2_valid(_, X, Y):-and(_,X)=Y.
+
+%OREL
+
+%IMPEL
+
+%NEGEL
+
+%NEGNEGEL
+
+%ANDINT
+
+%ORINT1
+
+%ORINT2
+
+%IMPINT
+
+%NEGINT
+
+%MT
+
+%PBC
+
+%LEM
