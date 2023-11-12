@@ -17,12 +17,6 @@ validproof(Prems, Goal,[], List):-!.
 validproof(Prems, Goal, [[Num,X,premise]|Next], List):- find(X,Prems), 
                                                         append(List, [[Num,X,premise]], NewList),!,
                                                         write(NewList),nl,
-                                                        write('Trying to call validproof again'),nl,
-                                                        write('Prems is: '),write(Prems),nl,
-                                                        write('Goal is: '),write(Goal),nl,
-                                                        write('NewList is: '),write(NewList),nl,
-                                                        write('Next is: '),write(Next),nl,
-                                                        write('validproof('),write(Prems),write(','),write(Goal),write(','),write(Next),write(','),write(NewList),write(')'),nl,
                                                         validproof(Prems, Goal, Next, NewList).
 
 %ANDEL1
@@ -38,6 +32,11 @@ validproof(Prems,Goal,[[LineNr,X,andel2(Num)]|Next],List):-find([Num, and(_,X), 
 %OREL
 
 %IMPEL
+validproof(Prems, Goal, [[LineNr, X, impel(Num1, Num2)]|Next], List):-find([Num1, imp(Y, X), _], List),
+                                                                      find([Num2, Y, _], List),
+                                                                      append(List, [[LineNr, X, impel(Num1, Num2)]], NewList),!,
+                                                                      write(NewList),nl,
+                                                                      validproof(Prems, Goal, Next, NewList).
 %validproof(_,[_,X,impel(Num1,Num2)],[Num1, Y, _],[Num2, Z, _]):-impel_valid(Num1,Num2,X,Y,Z).
 %NEGEL
 
