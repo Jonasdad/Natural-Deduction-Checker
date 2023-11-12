@@ -15,7 +15,6 @@ validproof(Prems, Goal, [[Num,X,premise]|Next], List):- find(X,Prems),
                                                         append(List, [[Num,X,premise]], NewList),!,
                                                         write(NewList),nl,
                                                         validproof(Prems, Goal, Next, NewList).
-
 %ANDEL1
 validproof(Prems,Goal,[[LineNr,X,andel1(Num)]|Next],List):-find([Num, and(X,_), _], List), 
                                                         append(List, [[LineNr, X, andel1(Num)]], NewList),!,
@@ -42,7 +41,6 @@ validproof(Prems,Goal,[[LineNr,X,andint(Num1,Num2)]|Next],List):-and(A,B)=X,find
                                                                   append(List, [[LineNr, X,Y, andint(Num1,Num2)]], NewList),!,
                                                                   write(NewList),nl,
                                                                   validproof(Prems, Goal, Next, NewList).
-
 %IMPEL
 validproof(Prems, Goal, [[LineNr, X, impel(Num1, Num2)]|Next], List):-find([Num1, imp(Y, X), _], List),
                                                                       find([Num2, Y, _], List),
@@ -50,6 +48,16 @@ validproof(Prems, Goal, [[LineNr, X, impel(Num1, Num2)]|Next], List):-find([Num1
                                                                       write(NewList),nl,
                                                                       validproof(Prems, Goal, Next, NewList).
 %NEGEL
+validproof(Prems, Goal, [[LineNr, cont, negel(Num1, Num2)]|Next], List):-find([Num1, X, _], List),
+                                                                    find([Num2, neg(X), _], List),
+                                                                    append(List, [[LineNr, cont, negel(Num1, Num2)]], NewList),!,
+                                                                    write(NewList),nl,
+                                                                    validproof(Prems, Goal, Next, NewList).
+%CONTEL
+validproof(Prems, Goal, [[LineNr, X, contel(Num)]|Next], List):-find([Num, cont, _], List),
+                                                                append(List, [[LineNr, X, contel(Num)]], NewList),!,
+                                                                write(NewList),nl,
+                                                                validproof(Prems, Goal, Next, NewList).
 %COPY
 validproof(Prems, Goal, [[LineNr, X, copy(Num)]|Next], List):-find([Num, X, _], List),
                                                               append(List, [[LineNr, X, copy(Num)]], NewList),!,
@@ -57,17 +65,23 @@ validproof(Prems, Goal, [[LineNr, X, copy(Num)]|Next], List):-find([Num, X, _], 
                                                               validproof(Prems, Goal, Next, NewList).
 %NEGNEGEL
 validproof(Prems, Goal, [[LineNr, X, negnegel(Num)]|Next], List):-find([Num, neg(neg(X)), _], List),
-                                                                    append(List, [[LineNr, X, negnegel(Num)]], NewList),!,
+                                                                append(List, [[LineNr, X, negnegel(Num)]], NewList),!,
+                                                                write(NewList),nl,
+                                                                validproof(Prems, Goal, Next, NewList).
+%LEM - Fråga om detta behöver verifieras.
+validproof(Prems, Goal, [[LineNr, or(X, neg(X)), lem]|Next], List):-append(List, [[LineNr, X, lem]], NewList),!,
                                                                     write(NewList),nl,
                                                                     validproof(Prems, Goal, Next, NewList).
+%MT
+validproof(Prems, Goal, [[LineNr, neg(X), mt(Num1, Num2)]|Next], List):-find([Num1, imp(X, Y), _], List),
+                                                                        find([Num2, neg(Y), _], List),
+                                                                        append(List, [[LineNr, X, neg(X), mt(Num1, Num2)]], NewList),!,
+                                                                        write(NewList),nl,
+                                                                        validproof(Prems, Goal, Next, NewList).
 %OREL
 
 %IMPINT
 
 %NEGINT
 
-%MT
-
 %PBC
-
-%LEM
