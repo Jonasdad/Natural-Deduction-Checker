@@ -1,0 +1,15 @@
+% En lista av premisser (v¨anstra delen av sekventen.)
+[imp(a,b), a].
+% M˚alet (h¨ogra delen av sekventen).
+b.
+% Beviset
+[
+[1, imp(a,b), premise],
+[2, a, premise],
+[
+    [3, neg(b), assumption],
+    [4, b, impel(1,2)],
+    [5, cont, negel(4,3)]
+],
+[6, b, pbc(3,5)]
+].

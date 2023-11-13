@@ -1,0 +1,17 @@
+% En lista av premisser (v¨anstra delen av sekventen.)
+[or(a,b)].
+% M˚alet (h¨ogra delen av sekventen).
+a.
+% Beviset
+[
+[1, or(a,b), premise],
+[
+    [2, a, assumption],
+    [3, a, copy(2)]
+],
+[
+    [4, b, assumption],
+    [5, b, copy(4)]
+],
+[6, a, orel(1,2,4,3,5)]
+].
