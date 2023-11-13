@@ -82,8 +82,7 @@ validproof(Prems, Goal, [[LineNr, X, contel(Num)]|Next], List):-find([Num, cont,
                                                                 %write(NewList),nl,
                                                                 validproof(Prems, Goal, Next, NewList).
 %COPY
-validproof(Prems, Goal, [[LineNr, X, copy(Num)]|Next], List):-find([Num, X, assumption], List),
-                                                              
+validproof(Prems, Goal, [[LineNr, X, copy(Num)]|Next], List):-find([Num, X, _], List),
                                                             append(List, [[LineNr, X, copy(Num)]], NewList),!,
                                                             %write(NewList),nl,
                                                             validproof(Prems, Goal, Next, NewList).
