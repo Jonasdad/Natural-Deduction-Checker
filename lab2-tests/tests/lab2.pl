@@ -8,6 +8,10 @@ getLast([_|Tail], A):-getLast(Tail,A).
 find(X, [X|_]).
 find(X, [_|Tail]):-find(X,Tail).
 
+%checkOutsideBox([], _).
+%checkOutsideBox([Head|Tail], Num):-checkOutsideBox(Tail, Num).
+%checkOutsideBox([[Num1, _, assumption]|Next], CurrNr):-!,nth0(0, ).
+
 
 valid_proof(Prems, Goal, Proof):- getLast(Proof, Last), !,nth0(1,Last,Goal), validproof(Prems, Goal, Proof, []).
 validproof(_, _,[], []):-!,false.
@@ -19,7 +23,7 @@ validproof(Prems, Goal, [[[LineNr, X, assumption]|Next]|Rest], List):-append(Lis
                                                                       validproof(Prems, Goal, Next, NewList),
                                                                       getLast(Next, Last),
                                                                       %write(Last),nl,
-                                                                      append([Last], NewList, FinalList),!,
+                                                                      append(NewList,[Last], FinalList),!,
                                                                       validproof(Prems, Goal, Rest, FinalList).                                                                      
 %NEGINT
 validproof(Prems, Goal, [[LineNr, neg(X), negint(Num1, Num2)]|Next], List):-find([Num1, X, _], List),
@@ -83,6 +87,7 @@ validproof(Prems, Goal, [[LineNr, X, contel(Num)]|Next], List):-find([Num, cont,
                                                                 validproof(Prems, Goal, Next, NewList).
 %COPY
 validproof(Prems, Goal, [[LineNr, X, copy(Num)]|Next], List):-find([Num, X, _], List),
+                                                            %checkOutsideBox(List, LineNr),             
                                                             append(List, [[LineNr, X, copy(Num)]], NewList),!,
                                                             %write(NewList),nl,
                                                             validproof(Prems, Goal, Next, NewList).
