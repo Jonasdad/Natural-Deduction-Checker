@@ -7,9 +7,29 @@ getLast([_|Tail], A):-getLast(Tail,A).
 find(X, [X|_]).
 find(X, [_|Tail]):-find(X,Tail).
 
+
 valid_proof(Prems, Goal, Proof):- getLast(Proof, Last), nth0(1,Last,Goal),!, validproof(Prems, Goal, Proof, List).
 validproof(Prems, Goal,[], List):-!.
 
+%ASSUMPTION
+
+validproof(Prems, Goal, [[[LineNr, X, assumption]|Next]|Rest], List):-append(List, [[LineNr, X, assumption]], NewList),!,
+                                                                      write('Box Found.'),nl,
+                                                                      write('next:'),nl,
+                                                                      write(Next),nl,
+                                                                      write('rest:'),nl,
+                                                                      write(Rest),nl,
+                                                                      validproof(Prems, Goal, Next, NewList),
+                                                                      append(NewList, List, FinalList),
+                                                                      validproof(Prems, Goal, Rest, FinalList).
+                                                                      
+%NEGINT
+validproof(Prems, Goal, [[LineNr, neg(X), negint(Num1, Num2)]|Next], List):-find([Num1, X, _], List),
+                                                                            find([Num2, cont, _], List),
+                                                                            append(List, [[LineNr, neg(X), negint(Num1, Num2)]], NewList),!,
+                                                                            write(NewList),nl,
+                                                                            validproof(Prems, Goal, Next, NewList).
+%IMPINT
 %PREMISE
 validproof(Prems, Goal, [[Num,X,premise]|Next], List):- find(X,Prems), 
                                                         append(List, [[Num,X,premise]], NewList),!,
@@ -80,8 +100,6 @@ validproof(Prems, Goal, [[LineNr, neg(X), mt(Num1, Num2)]|Next], List):-find([Nu
                                                                         validproof(Prems, Goal, Next, NewList).
 %OREL
 
-%IMPINT
 
-%NEGINT
 
 %PBC
